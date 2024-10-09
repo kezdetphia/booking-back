@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     isAdmin: {
       type: Boolean,
+      default: false, // Set default value to false
     },
     username: {
       type: String,
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: false,
       unique: true,
     },

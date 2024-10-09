@@ -29,6 +29,8 @@ const adminEditAppointment = async (req, res) => {
     userId,
   } = req.body;
 
+  console.log("Received data:", req.body);
+
   try {
     // Validate the appointmentId
 

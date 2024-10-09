@@ -15,15 +15,15 @@ router.get(
 
 router.patch(
   "/admineditappointment/:appointmentId",
-  // verifyToken,
-  // adminMiddleware,
+  verifyToken,
+  adminMiddleware,
   AdminController.adminEditAppointment
 );
 
 router.delete(
   "/admindeleteappointment/:appointmentId",
-  // verifyToken,
-  // adminMiddleware,
+  verifyToken,
+  adminMiddleware,
   AdminController.adminDeleteAppointment
 );
 
