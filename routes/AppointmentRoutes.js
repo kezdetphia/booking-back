@@ -5,16 +5,18 @@ const { verifyToken } = require("../middleware/verifiyToken");
 
 // Register a new user
 router.post("/create", verifyToken, AppointmentController.createAppointment);
+
 router.get(
   "/getappointments",
-  verifyToken,
+  // verifyToken,
   AppointmentController.getAppointments
 );
 
-// Sign in a user
-
-// router.get("/:id", UserController.getUser);
-
-// router.get("/getuserwithproducts/:id", UserController.getUserWithProducts);
+// Update an existing appointment
+router.patch(
+  "/usereditappointment",
+  // verifyToken,
+  AppointmentController.userEditAppointment
+);
 
 module.exports = router;

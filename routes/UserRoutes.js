@@ -9,6 +9,8 @@ router.post("/signup", UserController.signUp);
 // Sign in a user
 router.post("/signin", UserController.signIn);
 
+router.get("/getuserappointments/:userId", UserController.getUserAppointments);
+
 // router.get("/:id", UserController.getUser);
 
 // router.get("/getuserwithproducts/:id", UserController.getUserWithProducts);

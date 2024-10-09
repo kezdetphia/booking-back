@@ -13,4 +13,18 @@ router.get(
   AdminController.getAppointments
 );
 
+router.patch(
+  "/admineditappointment/:appointmentId",
+  // verifyToken,
+  // adminMiddleware,
+  AdminController.adminEditAppointment
+);
+
+router.delete(
+  "/admindeleteappointment/:appointmentId",
+  verifyToken,
+  adminMiddleware,
+  AdminController.adminDeleteAppointment
+);
+
 module.exports = router;

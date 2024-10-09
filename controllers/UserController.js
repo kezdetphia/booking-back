@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const Appointment = require("../models/AppointmentModel");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -105,8 +106,39 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserAppointments = async (req, res) => {
+  const { userId } = req.params;
+  console.log("Received userId:", userId);
+
+  try {
+    // Check if userId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      console.log("Invalid userId format");
+      return res.status(400).json({ message: "Invalid userId format" });
+    }
+
+    // Convert userId to a valid ObjectId
+    const validUserId = new mongoose.Types.ObjectId(userId);
+
+    // Query by userId
+    const appointments = await Appointment.find({ userId: validUserId });
+
+    if (!appointments || appointments.length === 0) {
+      console.log("No appointments found for userId:", userId);
+      return res.status(404).json({ message: "No appointments found" });
+    }
+
+    console.log("Found appointments:", appointments);
+    res.status(200).json({ appointments });
+  } catch (err) {
+    console.error("Error fetching appointments:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
   getUser,
+  getUserAppointments,
 };
