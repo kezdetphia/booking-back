@@ -22,8 +22,8 @@ router.patch(
 
 router.delete(
   "/admindeleteappointment/:appointmentId",
-  verifyToken,
-  adminMiddleware,
+  // verifyToken,
+  // adminMiddleware,
   AdminController.adminDeleteAppointment
 );
 

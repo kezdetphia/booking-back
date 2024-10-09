@@ -80,7 +80,9 @@ const adminEditAppointment = async (req, res) => {
 };
 
 const adminDeleteAppointment = async (req, res) => {
-  const { appointmentId } = req.body;
+  const { appointmentId } = req.params; // Use req.params to get the appointmentId
+  console.log("apppp iidd back", appointmentId);
+
   try {
     // Validate the appointmentId
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
@@ -88,17 +90,44 @@ const adminDeleteAppointment = async (req, res) => {
       return res.status(400).json({ message: "Invalid appointmentId format" });
     }
 
-    // Find the appointment by ID
-    const appointment = await Appointment.findByIdAndDelete(appointmentId);
+    // Convert appointmentId to ObjectId
+    const objectId = new mongoose.Types.ObjectId(appointmentId);
+
+    // Find and delete the appointment by ID
+    const appointment = await Appointment.findByIdAndDelete(objectId);
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
+    // Validate the userId from the appointment
+    const userId = appointment.userId;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      console.log("Invalid userId format");
+      return res.status(400).json({ message: "Invalid userId format" });
+    }
+
+    // Convert userId to ObjectId
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    // Find the user by userId from the appointment
+    const user = await User.findById(userObjectId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Remove the appointmentId from the user's appointments array
+    user.appointments = user.appointments.filter(
+      (id) => id.toString() !== appointmentId
+    );
+
+    // Save the updated user document
+    await user.save();
+
     res.status(200).json({
-      message: "Appointment updated successfully",
+      message: "Appointment deleted successfully",
     });
   } catch (err) {
-    console.error("Error updating appointment:", err);
+    console.error("Error deleting appointment:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
