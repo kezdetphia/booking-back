@@ -11,7 +11,8 @@ router.post("/signin", UserController.signIn);
 
 router.get("/getuserappointments/:userId", UserController.getUserAppointments);
 
-// router.get("/:id", UserController.getUser);
+router.get("/getmyuser", UserController.getMyUser);
+// router.get("/getmyuser/:token", UserController.getMyUser);
 
 // router.get("/getuserwithproducts/:id", UserController.getUserWithProducts);
 
