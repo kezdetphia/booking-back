@@ -83,7 +83,7 @@ const signIn = async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" } // Optional: Set token expiration time
+      { expiresIn: "30d" } // Optional: Set token expiration time
     );
 
     // Ensure user._doc exists and destructure safely
@@ -117,6 +117,28 @@ const getUser = async (req, res) => {
     }
     const { password, ...userWithoutPassword } = user.toObject();
     res.status(200).json(userWithoutPassword);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+const getMyUser = async (req, res) => {
+  try {
+    // Retrieve the token from the Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Verify and decode the token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById({ _id: decodedToken?.id });
+
+    res.json({ user });
   } catch (err) {
     console.error("Error fetching user:", err);
     res.status(500).json({ message: "Server error", error: err.message });
@@ -158,4 +180,5 @@ module.exports = {
   signIn,
   getUser,
   getUserAppointments,
+  getMyUser,
 };
