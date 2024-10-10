@@ -134,8 +134,22 @@ const adminDeleteAppointment = async (req, res) => {
   }
 };
 
+const adminGetAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (!users) {
+      return res.status(404).json({ message: "No users found" });
+    }
+    res.status(200).json({ users });
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAppointments,
   adminEditAppointment,
   adminDeleteAppointment,
+  adminGetAllUsers,
 };

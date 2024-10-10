@@ -10,13 +10,12 @@ const createAppointment = async (req, res) => {
   try {
     // Check if userId is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      console.log("Invalid userId format");
+      console.log("Invalid userId format:", userId); // Log invalid userId
       return res.status(400).json({ message: "Invalid userId format" });
     }
 
     // Convert userId to a valid ObjectId using 'new'
     const validUserId = new mongoose.Types.ObjectId(userId);
-    console.log("Valid UserId:", validUserId);
 
     const newAppointment = new Appointment({
       userId: validUserId,
@@ -29,11 +28,11 @@ const createAppointment = async (req, res) => {
       booked,
     });
 
+    // Save the new appointment
     await newAppointment.save();
-    console.log("NEW APP", newAppointment);
 
     // Update the User document to include this appointment
-    await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       validUserId,
       { $push: { appointments: newAppointment._id } },
       { new: true }
@@ -44,7 +43,7 @@ const createAppointment = async (req, res) => {
       appointment: newAppointment,
     });
   } catch (err) {
-    console.error("Error:", err);
+    console.error("Error occurred while creating appointment:", err);
     res.status(500).json({ message: "Server error", error: err });
   }
 };
@@ -149,6 +148,60 @@ const getOneAppointmentOfOneUser = (req, res) => {
   }
 };
 
+//Checks if user is admin, if so, deletes any appointment.
+// If not, user only deletes their own appointment.
+const deleteAppointment = async (req, res) => {
+  const { user } = req; // Assuming user object is attached to the request via the authMiddleware
+  console.log("deleteAppointment in controller", user);
+  const { appointmentId } = req.params;
+  console.log(
+    "appointmentId in controller",
+    appointmentId,
+    typeof appointmentId
+  );
+  try {
+    // Admin can delete any appointment
+    if (user.isAdmin === true) {
+      // Correctly check for boolean true
+      console.log("User is admin, proceeding to delete any appointment");
+
+      const appointment = await Appointment.findByIdAndDelete(appointmentId);
+
+      if (!appointment) {
+        console.log("Appointment not found for admin");
+        return res.status(404).json({ message: "Appointment not found" });
+      }
+
+      console.log("Appointment deleted by admin");
+      return res.status(200).json({ message: "Appointment deleted" });
+    }
+
+    // Regular user can only delete their own appointment
+    console.log(
+      "User is not admin, checking if they can delete their own appointment"
+    );
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      console.log("Appointment not found for user");
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    if (appointment.userId.toString() !== user._id.toString()) {
+      console.log("User unauthorized to delete this appointment");
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this appointment" });
+    }
+
+    await Appointment.findByIdAndDelete(appointmentId);
+    console.log("Appointment deleted by user");
+    return res.status(200).json({ message: "Appointment deleted" });
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createAppointment,
   getAppointments,
@@ -156,4 +209,5 @@ module.exports = {
   userEditAppointment,
   getUserAppointments,
   getOneAppointmentOfOneUser,
+  deleteAppointment,
 };

@@ -132,9 +132,11 @@ const getMyUser = async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1];
+    console.log("token in getMyUser", token);
 
     // Verify and decode the token
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decodedToken in getMyUser", decodedToken);
 
     const user = await User.findById({ _id: decodedToken?.id });
 

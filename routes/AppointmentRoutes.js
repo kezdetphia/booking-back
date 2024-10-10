@@ -19,4 +19,10 @@ router.patch(
   AppointmentController.userEditAppointment
 );
 
+router.delete(
+  "/deleteappointment/:appointmentId",
+  verifyToken,
+  AppointmentController.deleteAppointment
+);
+
 module.exports = router;

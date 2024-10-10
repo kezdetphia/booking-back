@@ -27,4 +27,11 @@ router.delete(
   AdminController.adminDeleteAppointment
 );
 
+router.get(
+  "/admingetallusers",
+  verifyToken,
+  adminMiddleware,
+  AdminController.adminGetAllUsers
+);
+
 module.exports = router;
