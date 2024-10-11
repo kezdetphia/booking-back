@@ -34,4 +34,18 @@ router.get(
   AdminController.adminGetAllUsers
 );
 
+router.post(
+  "/admincreatedisableddate",
+  verifyToken,
+  adminMiddleware,
+  AdminController.adminCreateDisabledDate
+);
+
+router.get(
+  "/admingetdisableddates",
+  verifyToken,
+  adminMiddleware,
+  AdminController.adminGetDisabledDates
+);
+
 module.exports = router;

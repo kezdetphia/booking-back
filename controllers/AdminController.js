@@ -1,5 +1,6 @@
 const Appointment = require("../models/AppointmentModel");
 const User = require("../models/UserModel");
+const DisabledDate = require("../models/DisabledDataModel");
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -147,9 +148,35 @@ const adminGetAllUsers = async (req, res) => {
   }
 };
 
+const adminCreateDisabledDate = async (req, res) => {
+  const { date, reason } = req.body;
+
+  try {
+    const disabledDate = await DisabledDate.create({ date, reason });
+    res
+      .status(201)
+      .json({ message: "dates are disabled", disabledDates: disabledDate });
+  } catch (err) {
+    console.error("Error creating disabled date:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const adminGetDisabledDates = async (req, res) => {
+  try {
+    const disabledDates = await DisabledDate.find();
+    res.status(200).json({ disabledDates });
+  } catch (err) {
+    console.error("Error fetching disabled dates:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAppointments,
   adminEditAppointment,
   adminDeleteAppointment,
   adminGetAllUsers,
+  adminCreateDisabledDate,
+  adminGetDisabledDates,
 };
