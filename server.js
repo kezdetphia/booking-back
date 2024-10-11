@@ -11,7 +11,7 @@ const app = express();
 
 // Allow requests from localhost:3000
 const corsOptions = {
-  origin: "https://booking-front-two.vercel.app/", // Change this to your frontend URL in production
+  origin: "https://booking-front-two.vercel.app", // Change this to your frontend URL in production
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allow desired methods
   credentials: true, // Allow credentials if needed
 };
