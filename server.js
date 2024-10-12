@@ -10,15 +10,15 @@ const adminRoutes = require("./routes/AdminRoutes");
 const app = express();
 
 // Allow requests from localhost:3000
-// const corsOptions = {
-//   origin: "https://booking-front-two.vercel.app", // Change this to your frontend URL in production
-//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allow desired methods
-//   credentials: true, // Allow credentials if needed
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: "https://booking-front-two.vercel.app", // Change this to your frontend URL in production
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allow desired methods
+  credentials: true, // Allow credentials if needed
+};
+app.use(cors(corsOptions));
 
 // Middleware
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 // Log request paths and methods for debugging
