@@ -111,10 +111,12 @@ const getUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid user ID format" });
     }
 
-    const user = await User.findById(id).populate("conversations");
+    const user = await User.findById(id).populate("appointments");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    console.log("User with populated appointments:", user); // Log the user object
     const { password, ...userWithoutPassword } = user.toObject();
     res.status(200).json(userWithoutPassword);
   } catch (err) {

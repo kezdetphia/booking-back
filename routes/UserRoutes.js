@@ -12,8 +12,7 @@ router.post("/signin", UserController.signIn);
 router.get("/getuserappointments/:userId", UserController.getUserAppointments);
 
 router.get("/getmyuser", UserController.getMyUser);
-// router.get("/getmyuser/:token", UserController.getMyUser);
 
-// router.get("/getuserwithproducts/:id", UserController.getUserWithProducts);
+router.get("/getuser/:id", UserController.getUser);
 
 module.exports = router;
