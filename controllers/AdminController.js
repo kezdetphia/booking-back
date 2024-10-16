@@ -172,6 +172,21 @@ const adminGetDisabledDates = async (req, res) => {
   }
 };
 
+const getOneAppointment = async (req, res) => {
+  const { appointmentId } = req.params;
+
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+    res.status(200).json({ appointment });
+  } catch (err) {
+    console.error("Error updating appointment:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAppointments,
   adminEditAppointment,
@@ -179,4 +194,5 @@ module.exports = {
   adminGetAllUsers,
   adminCreateDisabledDate,
   adminGetDisabledDates,
+  getOneAppointment,
 };

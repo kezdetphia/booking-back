@@ -13,6 +13,12 @@ router.get(
   AdminController.getAppointments
 );
 
+router.get(
+  "/getoneappointment/:appointmentId",
+  verifyToken,
+  AdminController.getOneAppointment
+);
+
 router.patch(
   "/admineditappointment/:appointmentId",
   verifyToken,

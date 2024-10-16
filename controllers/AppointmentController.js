@@ -138,16 +138,6 @@ const getUserAppointments = async (req, res) => {
   }
 };
 
-const getOneAppointmentOfOneUser = (req, res) => {
-  const { appointmendId } = req.params;
-
-  try {
-  } catch (err) {
-    console.error("Error updating appointment:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
 //Checks if user is admin, if so, deletes any appointment.
 // If not, user only deletes their own appointment.
 const deleteAppointment = async (req, res) => {
@@ -208,6 +198,6 @@ module.exports = {
   userEditAppointment,
   userEditAppointment,
   getUserAppointments,
-  getOneAppointmentOfOneUser,
+
   deleteAppointment,
 };
