@@ -5,11 +5,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const getAppointments = async (req, res) => {
-  console.log("getAppointments");
   try {
     const appointments = await Appointment.find();
 
-    console.log("appointments", appointments);
     res.status(201).json({ appointments });
   } catch (err) {
     console.error("Error:", err);
@@ -30,14 +28,7 @@ const adminEditAppointment = async (req, res) => {
     userId,
   } = req.body;
 
-  console.log("Received data:", req.body);
-
   try {
-    // Validate the appointmentId
-
-    console.log("app id in bacik", appointmentId);
-    console.log("app id type in bacik", typeof appointmentId);
-
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
       console.log("Invalid appointmentId format");
       return res.status(400).json({ message: "Invalid appointmentId format" });
@@ -84,7 +75,6 @@ const adminEditAppointment = async (req, res) => {
 
 const adminDeleteAppointment = async (req, res) => {
   const { appointmentId } = req.params; // Use req.params to get the appointmentId
-  console.log("apppp iidd back", appointmentId);
 
   try {
     // Validate the appointmentId
@@ -187,6 +177,29 @@ const getOneAppointment = async (req, res) => {
   }
 };
 
+const adminEditUserDetails = async (req, res) => {
+  const { userId, updateField, updateValue } = req.body; // Add fields for the property to update
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      console.log("No user found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the specified field
+    user[updateField] = updateValue; // Dynamically update the field based on request
+    await user.save(); // Save the changes
+
+    res
+      .status(200)
+      .json({ message: "User details updated successfully", user });
+  } catch (err) {
+    console.error("Error updating user details:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAppointments,
   adminEditAppointment,
@@ -195,4 +208,5 @@ module.exports = {
   adminCreateDisabledDate,
   adminGetDisabledDates,
   getOneAppointment,
+  adminEditUserDetails,
 };

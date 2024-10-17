@@ -50,8 +50,15 @@ router.post(
 router.get(
   "/admingetdisableddates",
   verifyToken,
-  adminMiddleware,
+  // adminMiddleware,
   AdminController.adminGetDisabledDates
+);
+
+router.patch(
+  "/adminedituserdetails",
+  verifyToken,
+  adminMiddleware,
+  AdminController.adminEditUserDetails
 );
 
 module.exports = router;

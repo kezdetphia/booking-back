@@ -134,11 +134,9 @@ const getMyUser = async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1];
-    console.log("token in getMyUser", token);
 
     // Verify and decode the token
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decodedToken in getMyUser", decodedToken);
 
     const user = await User.findById({ _id: decodedToken?.id });
 
@@ -151,7 +149,6 @@ const getMyUser = async (req, res) => {
 
 const getUserAppointments = async (req, res) => {
   const { userId } = req.params;
-  console.log("Received userId:", userId);
 
   try {
     // Check if userId is a valid ObjectId
@@ -171,7 +168,6 @@ const getUserAppointments = async (req, res) => {
       return res.status(404).json({ message: "No appointments found" });
     }
 
-    console.log("Found appointments:", appointments);
     res.status(200).json({ appointments });
   } catch (err) {
     console.error("Error fetching appointments:", err);

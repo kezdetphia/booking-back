@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    usualAppointmentLength: {
+      type: String,
+      default: 60,
+    },
     appointments: {
       type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIDs
       ref: "Appointment", // Reference to the Appointment model

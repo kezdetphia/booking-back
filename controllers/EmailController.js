@@ -3,6 +3,7 @@ const { sendEmail } = require("../utils/mailer");
 
 const emailSend = async (req, res) => {
   const { to, subject, text, html } = req.body;
+  console.log("Email recipient:", to);
 
   try {
     await sendEmail(to, subject, text, html);

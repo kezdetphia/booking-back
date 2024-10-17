@@ -49,11 +49,9 @@ const createAppointment = async (req, res) => {
 };
 
 const getAppointments = async (req, res) => {
-  console.log("getAppointments");
   try {
     const appointments = await Appointment.find();
 
-    console.log("appointments", appointments);
     res.status(201).json({ appointments });
   } catch (err) {
     console.error("Error:", err);
@@ -142,13 +140,8 @@ const getUserAppointments = async (req, res) => {
 // If not, user only deletes their own appointment.
 const deleteAppointment = async (req, res) => {
   const { user } = req; // Assuming user object is attached to the request via the authMiddleware
-  console.log("deleteAppointment in controller", user);
   const { appointmentId } = req.params;
-  console.log(
-    "appointmentId in controller",
-    appointmentId,
-    typeof appointmentId
-  );
+
   try {
     // Admin can delete any appointment
     if (user.isAdmin === true) {
