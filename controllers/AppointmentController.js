@@ -138,47 +138,82 @@ const getUserAppointments = async (req, res) => {
 
 //Checks if user is admin, if so, deletes any appointment.
 // If not, user only deletes their own appointment.
+// const deleteAppointment = async (req, res) => {
+//   const { user } = req; // Assuming user object is attached to the request via the authMiddleware
+//   const { appointmentId } = req.params;
+
+//   try {
+//     // Admin can delete any appointment
+//     if (user.isAdmin === true) {
+//       // Correctly check for boolean true
+//       console.log("User is admin, proceeding to delete any appointment");
+
+//       const appointment = await Appointment.findByIdAndDelete(appointmentId);
+
+//       if (!appointment) {
+//         console.log("Appointment not found for admin");
+//         return res.status(404).json({ message: "Appointment not found" });
+//       }
+
+//       console.log("Appointment deleted by admin");
+//       return res.status(200).json({ message: "Appointment deleted" });
+//     }
+
+//     // Regular user can only delete their own appointment
+//     console.log(
+//       "User is not admin, checking if they can delete their own appointment"
+//     );
+//     const appointment = await Appointment.findById(appointmentId);
+//     if (!appointment) {
+//       console.log("Appointment not found for user");
+//       return res.status(404).json({ message: "Appointment not found" });
+//     }
+
+//     if (appointment.userId.toString() !== user._id.toString()) {
+//       console.log("User unauthorized to delete this appointment");
+//       return res
+//         .status(403)
+//         .json({ message: "Unauthorized to delete this appointment" });
+//     }
+
+//     console.log("Appointment deleted by user");
+//     return res
+//       .status(200)
+//       .json({ message: "Appointment deleted", appointment: appointment });
+//   } catch (error) {
+//     console.error("Error deleting appointment:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 const deleteAppointment = async (req, res) => {
   const { user } = req; // Assuming user object is attached to the request via the authMiddleware
   const { appointmentId } = req.params;
 
   try {
-    // Admin can delete any appointment
-    if (user.isAdmin === true) {
-      // Correctly check for boolean true
-      console.log("User is admin, proceeding to delete any appointment");
-
-      const appointment = await Appointment.findByIdAndDelete(appointmentId);
-
-      if (!appointment) {
-        console.log("Appointment not found for admin");
-        return res.status(404).json({ message: "Appointment not found" });
-      }
-
-      console.log("Appointment deleted by admin");
-      return res.status(200).json({ message: "Appointment deleted" });
+    // Only admin can delete any appointment
+    if (user.isAdmin !== true) {
+      console.log("Unauthorized: User is not an admin");
+      return res
+        .status(403)
+        .json({ message: "Unauthorized: Only admin can delete appointments" });
     }
 
-    // Regular user can only delete their own appointment
-    console.log(
-      "User is not admin, checking if they can delete their own appointment"
-    );
-    const appointment = await Appointment.findById(appointmentId);
+    console.log("User is admin, proceeding to delete any appointment");
+
+    // Find and delete the appointment
+    const appointment = await Appointment.findByIdAndDelete(appointmentId);
+
     if (!appointment) {
-      console.log("Appointment not found for user");
+      console.log("Appointment not found for admin");
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    if (appointment.userId.toString() !== user._id.toString()) {
-      console.log("User unauthorized to delete this appointment");
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to delete this appointment" });
-    }
-
-    await Appointment.findByIdAndDelete(appointmentId);
-    console.log("Appointment deleted by user");
-    return res.status(200).json({ message: "Appointment deleted" });
+    console.log("Appointment deleted by admin");
+    return res.status(200).json({
+      message: "Appointment deleted",
+      appointment: appointment, // Return the deleted appointment
+    });
   } catch (error) {
     console.error("Error deleting appointment:", error);
     return res.status(500).json({ message: "Server error" });

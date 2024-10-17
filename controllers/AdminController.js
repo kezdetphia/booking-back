@@ -66,6 +66,7 @@ const adminEditAppointment = async (req, res) => {
     res.status(200).json({
       message: "Appointment updated successfully",
       updatedAppointment,
+      oldAppointment: appointment,
     });
   } catch (err) {
     console.error("Error updating appointment:", err);
