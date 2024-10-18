@@ -3,6 +3,7 @@ const User = require("../models/UserModel");
 const DisabledDate = require("../models/DisabledDataModel");
 const express = require("express");
 const mongoose = require("mongoose");
+// const { io } = require("../server");
 
 const getAppointments = async (req, res) => {
   try {
@@ -63,6 +64,9 @@ const adminEditAppointment = async (req, res) => {
       return res.status(404).json({ message: "Failed to update appointment" });
     }
 
+    // Emit the updated appointment to all clients
+    io.emit("appointmentUpdated", updatedAppointment);
+
     res.status(200).json({
       message: "Appointment updated successfully",
       updatedAppointment,
@@ -117,6 +121,9 @@ const adminDeleteAppointment = async (req, res) => {
     // Save the updated user document
     await user.save();
 
+    // Emit the deleted appointment to all clients
+    global.io.emit("appointmentDeleted", appointment);
+
     res.status(200).json({
       message: "Appointment deleted successfully",
     });
@@ -144,6 +151,10 @@ const adminCreateDisabledDate = async (req, res) => {
 
   try {
     const disabledDate = await DisabledDate.create({ date, reason });
+
+    // Emit the adminCreateDisabledDate
+    io.emit("adminCreateDisabledDate", disabledDate);
+
     res
       .status(201)
       .json({ message: "dates are disabled", disabledDates: disabledDate });
@@ -156,6 +167,10 @@ const adminCreateDisabledDate = async (req, res) => {
 const adminGetDisabledDates = async (req, res) => {
   try {
     const disabledDates = await DisabledDate.find();
+
+    // Emit the getdisabledDates
+    io.emit("adminGetDisabledDate", disabledDates);
+
     res.status(200).json({ disabledDates });
   } catch (err) {
     console.error("Error fetching disabled dates:", err);
@@ -182,6 +197,8 @@ const adminEditUserDetails = async (req, res) => {
   const { userId, updateField, updateValue } = req.body; // Add fields for the property to update
   try {
     const user = await User.findById(userId);
+
+    io.emit("admindEditedUserdetails", user);
 
     if (!user) {
       console.log("No user found");

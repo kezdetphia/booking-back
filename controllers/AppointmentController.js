@@ -37,6 +37,10 @@ const createAppointment = async (req, res) => {
       { $push: { appointments: newAppointment._id } },
       { new: true }
     );
+    await updatedUser.save();
+
+    // Emit the appointment creation event
+    io.emit("appointmentCreated", newAppointment);
 
     res.status(201).json({
       message: "Appointment created successfully",
@@ -111,6 +115,9 @@ const userEditAppointment = async (req, res) => {
       { new: true, runValidators: true } // Options: return the updated document and run validators
     );
 
+    // Emit the appointment update event
+    io.emit("appointmentUpdated", updatedAppointment);
+
     res.status(200).json({
       message: "Appointment updated successfully",
       updatedAppointment,
@@ -129,6 +136,10 @@ const getUserAppointments = async (req, res) => {
     if (!appointments || appointments.length === 0) {
       return res.status(404).json({ message: "No appointments found" });
     }
+
+    // Emit the appointment get event
+    io.emit("appointmentsGet", appointments);
+
     res.status(200).json({ appointments });
   } catch (err) {
     console.error("Error updating appointment:", err);
@@ -208,6 +219,9 @@ const deleteAppointment = async (req, res) => {
       console.log("Appointment not found for admin");
       return res.status(404).json({ message: "Appointment not found" });
     }
+
+    // Emit the deleted appointment to all clients
+    global.io.emit("appointmentDeleted", appointment);
 
     console.log("Appointment deleted by admin");
     return res.status(200).json({
