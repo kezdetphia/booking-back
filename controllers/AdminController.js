@@ -5,16 +5,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 // const { io } = require("../server");
 
-const getAppointments = async (req, res) => {
-  try {
-    const appointments = await Appointment.find();
+// const getAppointments = async (req, res) => {
+//   try {
+//     const appointments = await Appointment.find();
 
-    res.status(201).json({ appointments });
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ message: "Server error", error: err });
-  }
-};
+//     res.status(201).json({ appointments });
+//   } catch (err) {
+//     console.error("Error:", err);
+//     res.status(500).json({ message: "Server error", error: err.message });
+//   }
+// };
 
 const adminEditAppointment = async (req, res) => {
   const {
@@ -219,7 +219,7 @@ const adminEditUserDetails = async (req, res) => {
 };
 
 module.exports = {
-  getAppointments,
+  // getAppointments,
   adminEditAppointment,
   adminDeleteAppointment,
   adminGetAllUsers,
