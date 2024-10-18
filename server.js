@@ -105,7 +105,7 @@ global.io = io;
 
 // Socket.IO connection
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  console.log(`New client connected: ${socket.id}`); // Logs the socket ID
 
   socket.on("updateAppointment", (data) => {
     io.emit("appointmentUpdated", data);
