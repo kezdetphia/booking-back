@@ -8,21 +8,22 @@ router.post("/create", verifyToken, AppointmentController.createAppointment);
 
 router.get(
   "/getappointments",
-  // verifyToken,
+  verifyToken,
   AppointmentController.getAppointments
 );
 
-// Update an existing appointment
-router.patch(
-  "/usereditappointment",
-  // verifyToken,
-  AppointmentController.userEditAppointment
-);
+//USER UPDATE APPOINTMENT - not allowed
+//
+// router.patch(
+//   "/usereditappointment",
+//   // verifyToken,
+//   AppointmentController.userEditAppointment
+// );
 
-router.delete(
-  "/deleteappointment/:appointmentId",
-  verifyToken,
-  AppointmentController.deleteAppointment
-);
+// router.delete(
+//   "/deleteappointment/:appointmentId",
+//   verifyToken,
+//   AppointmentController.deleteAppointment
+// );
 
 module.exports = router;

@@ -98,7 +98,7 @@ const io = socketIo(server, {
   cors: {
     origin: process.env.REACT_APP_FRONT_END_URL, // Allow frontend to access WebSocket
     // origin: "http://localhost:3000", // Allow frontend to access WebSocket
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   },
 });
