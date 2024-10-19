@@ -65,7 +65,8 @@ const app = express();
 
 // CORS options to allow requests from frontend
 const corsOptions = {
-  origin: "http://localhost:3000", // Change this to your frontend URL
+  origin: process.env.REACT_APP_FRONT_END_URL,
+  // origin: "http://localhost:3000", // Change this to your frontend URL
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 };
@@ -95,7 +96,8 @@ mongoose
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000", // Allow frontend to access WebSocket
+    origin: process.env.REACT_APP_FRONT_END_URL, // Allow frontend to access WebSocket
+    // origin: "http://localhost:3000", // Allow frontend to access WebSocket
     methods: ["GET", "POST"],
     credentials: true,
   },
