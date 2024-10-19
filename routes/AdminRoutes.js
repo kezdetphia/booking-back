@@ -6,12 +6,12 @@ const { adminMiddleware } = require("../middleware/adminMiddleware");
 
 // Register a new user
 
-router.get(
-  "/getappointments",
-  verifyToken,
-  adminMiddleware,
-  AdminController.getAppointments
-);
+// router.get(
+//   "/getappointments",
+//   verifyToken,
+//   adminMiddleware,
+//   AdminController.getAppointments
+// );
 
 router.get(
   "/getoneappointment/:appointmentId",
