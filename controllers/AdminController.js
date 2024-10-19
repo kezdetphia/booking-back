@@ -211,10 +211,11 @@ const adminEditUserDetails = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "User details updated successfully", user });
+      // .json({ message: "User details updated successfully", user });
+      .json({ message: "User details updated successfully" });
   } catch (err) {
     console.error("Error updating user details:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error. Please try again later!" });
   }
 };
 
