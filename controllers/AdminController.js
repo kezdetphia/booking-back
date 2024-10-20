@@ -126,6 +126,7 @@ const adminDeleteAppointment = async (req, res) => {
 
     res.status(200).json({
       message: "Appointment deleted successfully",
+      appointment,
     });
   } catch (err) {
     console.error("Error deleting appointment:", err);
